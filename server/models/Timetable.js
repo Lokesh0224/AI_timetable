@@ -10,6 +10,7 @@ const TimetableEntrySchema = new mongoose.Schema({
   day:          { type: String, enum: ['Monday','Tuesday','Wednesday','Thursday','Friday'] },
   timeSlot:     { type: String },
   room:         { type: String },
+  priority:     { type: Number, enum: [1, 2, 3], default: 1 },
   hasConflict:  { type: Boolean, default: false }
 }, { timestamps: true });
 

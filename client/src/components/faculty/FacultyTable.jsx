@@ -18,9 +18,9 @@ export default function FacultyTable({ facultyList, onRefresh, onEdit }) {
     }
   };
 
-  const countTotalSlots = (slotsMap) => {
-    if (!slotsMap) return 0;
-    return Object.values(slotsMap).reduce((acc, slots) => acc + slots.length, 0);
+  const countTotalSlots = (availability) => {
+    if (!availability) return 0;
+    return availability.length;
   };
 
   if (facultyList.length === 0) {
@@ -58,7 +58,7 @@ export default function FacultyTable({ facultyList, onRefresh, onEdit }) {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-wrap gap-1.5 w-48">
-                    {faculty.availableDays.map(day => (
+                    {[...new Set((faculty.availability || []).map(a => a.day))].map(day => (
                       <span key={day} className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-700 shadow-sm shadow-indigo-100">
                         {day.substring(0, 3)}
                       </span>
@@ -67,7 +67,7 @@ export default function FacultyTable({ facultyList, onRefresh, onEdit }) {
                 </td>
                 <td className="px-6 py-4 text-center">
                   <span className="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 shadow-sm shadow-emerald-100/50">
-                    {countTotalSlots(faculty.availableSlots)} slots
+                    {countTotalSlots(faculty.availability)} slots
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">

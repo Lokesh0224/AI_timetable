@@ -8,6 +8,26 @@ import axios from 'axios';
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
 const SLOTS = ['9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM'];
 
+function PriorityDot({ priority }) {
+  if (!priority) return null;
+  const colors = {
+    1: 'bg-green-500',
+    2: 'bg-amber-400',
+    3: 'bg-orange-500'
+  };
+  const labels = {
+    1: 'Scheduled at preferred time',
+    2: 'Scheduled at fallback time (P2)',
+    3: 'Scheduled at last resort time (P3)'
+  };
+  return (
+    <div
+      className={`w-2.5 h-2.5 rounded-full ${colors[priority]} absolute top-2 right-2 border border-white/50 shadow-sm`}
+      title={labels[priority]}
+    />
+  );
+}
+
 export default function ViewTimetable() {
   const [data, setData] = useState([]);
   const [facultyList, setFacultyList] = useState([]);
@@ -223,6 +243,12 @@ export default function ViewTimetable() {
             </div>
           )}
 
+          <div className="bg-white border-b border-slate-200 px-5 py-3 flex gap-6 text-xs text-slate-600 font-bold">
+            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm border border-white/50"/>Scheduled at Priority 1</span>
+            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm border border-white/50"/>Scheduled at Priority 2</span>
+            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-orange-500 shadow-sm border border-white/50"/>Scheduled at Priority 3</span>
+          </div>
+
           <div className="flex bg-slate-50 border-b border-slate-200">
             <div className="w-24 shrink-0 border-r border-slate-200 p-4 bg-slate-100 flex items-center justify-center font-black text-xs text-slate-400 uppercase tracking-widest shadow-inner">
               Time
@@ -264,9 +290,10 @@ export default function ViewTimetable() {
                           <motion.div 
                             initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
                             key={c._id} 
-                            className={`p-3.5 border-l-4 rounded-r-xl rounded-l-sm shadow-sm flex flex-col h-full ring-1 ring-black/5 hover:shadow-md transition-shadow cursor-default ${getYearColor(c.year)}`}
+                            className={`relative p-3.5 border-l-4 rounded-r-xl rounded-l-sm shadow-sm flex flex-col h-full ring-1 ring-black/5 hover:shadow-md transition-shadow cursor-default ${getYearColor(c.year)}`}
                           >
-                            <div className="font-extrabold text-[13px] leading-tight mb-1" title={c.subjectId?.name}>{c.subjectId?.name}</div>
+                            <PriorityDot priority={c.priority} />
+                            <div className="font-extrabold text-[13px] leading-tight mb-1 pr-4" title={c.subjectId?.name}>{c.subjectId?.name}</div>
                             {!selectedFacultyObj && <div className="text-[11px] font-bold opacity-80 truncate tracking-wide">{c.facultyId?.name}</div>}
                             <div className="font-mono text-[10px] font-bold opacity-70 uppercase my-1">{c.room}</div>
                             

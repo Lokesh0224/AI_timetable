@@ -228,6 +228,41 @@ export default function Generate() {
               </div>
             )}
 
+            {results?.priorityReport && (
+              <div className="bg-white border border-slate-200 shadow-xl shadow-slate-200/40 rounded-2xl overflow-hidden ring-1 ring-slate-900/5">
+                <div className="p-6 border-b border-slate-100 bg-slate-50/80">
+                  <h3 className="font-extrabold text-lg text-slate-800 tracking-tight mb-2">Priority Usage Report</h3>
+                  <p className="text-sm text-slate-500 font-medium">Breakdown of priority slots used per subject scheduling logic.</p>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm text-left">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase text-[10px] tracking-widest">
+                      <tr>
+                        <th className="px-6 py-4">Subject (Faculty)</th>
+                        <th className="px-6 py-4 text-center text-green-700">P1</th>
+                        <th className="px-6 py-4 text-center text-amber-700">P2</th>
+                        <th className="px-6 py-4 text-center text-orange-700">P3</th>
+                        <th className="px-6 py-4 text-center font-extrabold">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {results.priorityReport.map((row, i) => (
+                        <tr key={i} className="hover:bg-slate-50/50">
+                          <td className="px-6 py-3 font-semibold text-slate-800">
+                            {row.subjectName} <span className="text-slate-500 font-normal">({row.facultyName})</span>
+                          </td>
+                          <td className="px-6 py-3 text-center font-mono font-bold text-green-600">{row.p1 || '-'}</td>
+                          <td className="px-6 py-3 text-center font-mono font-bold text-amber-500">{row.p2 || '-'}</td>
+                          <td className="px-6 py-3 text-center font-mono font-bold text-orange-500">{row.p3 || '-'}</td>
+                          <td className="px-6 py-3 text-center font-bold text-slate-900">{row.total}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
             <div className="bg-white border border-slate-200 rounded-2xl shadow-xl shadow-slate-200/40 overflow-hidden ring-1 ring-slate-900/5">
               <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/80">
                 <h3 className="font-extrabold text-lg text-slate-800 tracking-tight">Data Preview</h3>

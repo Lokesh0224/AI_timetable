@@ -47,28 +47,66 @@ const sectionsData = [
 
 const facultyData = [
   { name: "Dr. Priya Sharma",  email: "priya@college.edu",  dept: "CSE",
-    availableDays: ["Monday","Wednesday","Friday"],
-    availableSlots: { Monday:["9AM","10AM","11AM"], Wednesday:["2PM","3PM","4PM"], Friday:["9AM","10AM","11AM"] }
+    availability: [
+      { day: "Monday",    timeSlot: "9AM",  priority: 1 },
+      { day: "Monday",    timeSlot: "10AM", priority: 1 },
+      { day: "Wednesday", timeSlot: "2PM",  priority: 2 },
+      { day: "Wednesday", timeSlot: "3PM",  priority: 2 },
+      { day: "Friday",    timeSlot: "9AM",  priority: 3 },
+      { day: "Friday",    timeSlot: "10AM", priority: 3 },
+    ]
   },
   { name: "Prof. Ravi Kumar",  email: "ravi@college.edu",   dept: "CSE",
-    availableDays: ["Tuesday","Thursday"],
-    availableSlots: { Tuesday:["9AM","10AM","11AM","2PM","3PM"], Thursday:["9AM","10AM","11AM","2PM","3PM"] }
+    availability: [
+      { day: "Tuesday",   timeSlot: "9AM",  priority: 1 },
+      { day: "Tuesday",   timeSlot: "10AM", priority: 1 },
+      { day: "Tuesday",   timeSlot: "2PM",  priority: 1 },
+      { day: "Thursday",  timeSlot: "9AM",  priority: 2 },
+      { day: "Thursday",  timeSlot: "10AM", priority: 2 },
+      { day: "Thursday",  timeSlot: "2PM",  priority: 2 },
+    ]
   },
   { name: "Dr. Meena Nair",   email: "meena@college.edu",  dept: "IT",
-    availableDays: ["Monday","Tuesday","Wednesday"],
-    availableSlots: { Monday:["2PM","3PM","4PM"], Tuesday:["9AM","10AM","11AM"], Wednesday:["9AM","10AM","11AM"] }
+    availability: [
+      { day: "Monday",    timeSlot: "2PM",  priority: 1 },
+      { day: "Monday",    timeSlot: "3PM",  priority: 1 },
+      { day: "Tuesday",   timeSlot: "9AM",  priority: 2 },
+      { day: "Tuesday",   timeSlot: "10AM", priority: 2 },
+      { day: "Wednesday", timeSlot: "9AM",  priority: 3 },
+      { day: "Wednesday", timeSlot: "10AM", priority: 3 },
+    ]
   },
   { name: "Prof. Suresh Babu", email: "suresh@college.edu", dept: "CSE",
-    availableDays: ["Wednesday","Thursday","Friday"],
-    availableSlots: { Wednesday:["9AM","10AM"], Thursday:["2PM","3PM","4PM"], Friday:["9AM","10AM","11AM","2PM"] }
+    availability: [
+       { day: "Wednesday", timeSlot: "9AM",  priority: 1 },
+       { day: "Wednesday", timeSlot: "10AM", priority: 1 },
+       { day: "Thursday",  timeSlot: "2PM",  priority: 2 },
+       { day: "Thursday",  timeSlot: "3PM",  priority: 2 },
+       { day: "Friday",    timeSlot: "9AM",  priority: 3 },
+       { day: "Friday",    timeSlot: "10AM", priority: 3 },
+    ]
   },
   { name: "Sarvani",           email: "sarvani@college.edu", dept: "CSE",
-    availableDays: ["Monday","Tuesday","Wednesday"],
-    availableSlots: { Monday:["9AM","10AM"], Tuesday:["9AM","10AM"], Wednesday:["9AM"] }
+    availability: [
+      { day: 'Monday',    timeSlot: '9AM',  priority: 1 },
+      { day: 'Monday',    timeSlot: '10AM', priority: 1 },
+      { day: 'Tuesday',   timeSlot: '9AM',  priority: 1 },
+      { day: 'Tuesday',   timeSlot: '10AM', priority: 1 },
+      { day: 'Wednesday', timeSlot: '9AM',  priority: 2 },
+      { day: 'Wednesday', timeSlot: '10AM', priority: 2 },
+      { day: 'Thursday',  timeSlot: '9AM',  priority: 3 },
+    ]
   },
   { name: "Sambit",            email: "sambit@college.edu",  dept: "CSE",
-    availableDays: ["Monday","Tuesday","Wednesday"],
-    availableSlots: { Monday:["9AM","10AM"], Tuesday:["9AM","10AM"], Wednesday:["9AM"] }
+    availability: [
+      { day: 'Monday',    timeSlot: '9AM',  priority: 1 },
+      { day: 'Monday',    timeSlot: '10AM', priority: 1 },
+      { day: 'Tuesday',   timeSlot: '9AM',  priority: 1 },
+      { day: 'Tuesday',   timeSlot: '10AM', priority: 1 },
+      { day: 'Wednesday', timeSlot: '9AM',  priority: 2 },
+      { day: 'Wednesday', timeSlot: '10AM', priority: 2 },
+      { day: 'Thursday',  timeSlot: '9AM',  priority: 3 },
+    ]
   }
 ];
 
@@ -140,8 +178,7 @@ const seedDB = async () => {
       name: f.name,
       email: f.email,
       departmentId: depMap[f.dept],
-      availableDays: f.availableDays,
-      availableSlots: f.availableSlots
+      availability: f.availability
     }));
     const savedFacs = await Faculty.insertMany(facsToSave);
     const facMap = {};

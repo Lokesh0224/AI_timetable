@@ -82,12 +82,9 @@ exports.generate = async (req, res, next) => {
     const facultyMap = {};
     for (const f of faculties) {
       facultyMap[f._id.toString()] = f;
-      // manual total count
-      for (const day of f.availableDays) {
-        if (f.availableSlots.has(day)) {
-          totalAvailableSlotsCount += f.availableSlots.get(day).length;
-        }
-      }
+      // count valid slots (excluding lunch)
+      const validSlots = (f.availability || []).filter(a => a.timeSlot !== '1PM').length;
+      totalAvailableSlotsCount += validSlots;
     }
 
     const totalSessionsNeeded = subjects.reduce((acc, sub) => acc + sub.hoursPerWeek, 0);
@@ -99,13 +96,13 @@ exports.generate = async (req, res, next) => {
     }
 
     // Run scheduler
-    const { timetable, warnings } = generateTimetable(subjects, facultyMap, rooms);
+    const { timetable, warnings, priorityReport } = generateTimetable(subjects, facultyMap, rooms);
 
     // Save to DB
     await TimetableEntry.deleteMany({}); // clear old
     await TimetableEntry.insertMany(timetable);
 
-    res.json({ message: 'Timetable generated successfully', scheduled: timetable.length, warnings });
+    res.json({ message: 'Timetable generated successfully', scheduled: timetable.length, warnings, priorityReport });
   } catch (error) { next(error); }
 };
 
@@ -171,14 +168,11 @@ exports.getStats = async (req, res, next) => {
     const subjects = await Subject.find({}, 'hoursPerWeek');
     const totalSessionsNeeded = subjects.reduce((sum, s) => sum + s.hoursPerWeek, 0);
 
-    const faculties = await Faculty.find({}, 'availableDays availableSlots');
+    const faculties = await Faculty.find({}, 'availability');
     let totalAvailableSlots = 0;
     for (const f of faculties) {
-      for (const day of f.availableDays) {
-        if (f.availableSlots.has(day)) {
-          totalAvailableSlots += f.availableSlots.get(day).length;
-        }
-      }
+      const validSlots = (f.availability || []).filter(a => a.timeSlot !== '1PM').length;
+      totalAvailableSlots += validSlots;
     }
 
     res.json({

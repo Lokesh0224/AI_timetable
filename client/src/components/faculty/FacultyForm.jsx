@@ -7,8 +7,7 @@ export default function FacultyForm({ onRefresh, editItem, setEditItem }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [department, setDepartment] = useState('');
-  const [availableDays, setAvailableDays] = useState([]);
-  const [availableSlots, setAvailableSlots] = useState({});
+  const [availability, setAvailability] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -16,8 +15,7 @@ export default function FacultyForm({ onRefresh, editItem, setEditItem }) {
       setName(editItem.name);
       setEmail(editItem.email);
       setDepartment(editItem.department);
-      setAvailableDays(editItem.availableDays);
-      setAvailableSlots(editItem.availableSlots);
+      setAvailability(editItem.availability || []);
     } else {
       resetForm();
     }
@@ -25,24 +23,17 @@ export default function FacultyForm({ onRefresh, editItem, setEditItem }) {
 
   const resetForm = () => {
     setName(''); setEmail(''); setDepartment('');
-    setAvailableDays([]); setAvailableSlots({});
+    setAvailability([]);
     setEditItem(null);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (availableDays.length === 0) return toast.error("Please select at least 1 available day.");
+    if (availability.length < 5) return toast.error(`This faculty has only ${availability.length} slots set. Minimum 5 needed to fully schedule any subject.`);
     
-    // validate slots
-    let hasSlots = true;
-    availableDays.forEach(day => {
-      if (!availableSlots[day] || availableSlots[day].length === 0) hasSlots = false;
-    });
-    if (!hasSlots) return toast.error("Every selected day must have at least 1 time slot.");
-
     try {
       setLoading(true);
-      const payload = { name, email, department, availableDays, availableSlots };
+      const payload = { name, email, department, availability };
       
       if (editItem) {
         await facultyAPI.update(editItem._id, payload);
@@ -102,10 +93,8 @@ export default function FacultyForm({ onRefresh, editItem, setEditItem }) {
         
         <div className="pt-5 mt-5 border-t border-slate-100">
           <AvailabilityPicker 
-            availableDays={availableDays} 
-            availableSlots={availableSlots} 
-            setAvailableDays={setAvailableDays} 
-            setAvailableSlots={setAvailableSlots} 
+            availability={availability} 
+            setAvailability={setAvailability} 
           />
         </div>
 

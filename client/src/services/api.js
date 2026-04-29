@@ -21,6 +21,30 @@ api.interceptors.response.use(
   }
 );
 
+export const departmentsAPI = {
+  getAll: () => api.get('/departments'),
+  create: (data) => api.post('/departments', data),
+  update: (id, data) => api.put(`/departments/${id}`, data),
+  delete: (id) => api.delete(`/departments/${id}`),
+};
+
+export const programsAPI = {
+  getAll: () => api.get('/programs'),
+  getByDepartment: (deptId) => api.get(`/programs/department/${deptId}`),
+  create: (data) => api.post('/programs', data),
+  update: (id, data) => api.put(`/programs/${id}`, data),
+  delete: (id) => api.delete(`/programs/${id}`),
+};
+
+export const sectionsAPI = {
+  getAll: () => api.get('/sections'),
+  getByProgram: (programId) => api.get(`/sections/program/${programId}`),
+  create: (data) => api.post('/sections', data),
+  createBulk: (data) => api.post('/sections/bulk', data),
+  update: (id, data) => api.put(`/sections/${id}`, data),
+  delete: (id) => api.delete(`/sections/${id}`),
+};
+
 export const facultyAPI = {
   getAll: () => api.get('/faculty'),
   getById: (id) => api.get(`/faculty/${id}`),
@@ -32,6 +56,7 @@ export const facultyAPI = {
 export const subjectsAPI = {
   getAll: () => api.get('/subjects'),
   create: (data) => api.post('/subjects', data),
+  createBulk: (data) => api.post('/subjects/bulk', data),
   update: (id, data) => api.put(`/subjects/${id}`, data),
   delete: (id) => api.delete(`/subjects/${id}`),
 };

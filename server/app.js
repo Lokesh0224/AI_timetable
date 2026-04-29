@@ -15,6 +15,9 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use('/api/departments', require('./routes/departments'));
+app.use('/api/programs', require('./routes/programs'));
+app.use('/api/sections', require('./routes/sections'));
 app.use('/api/faculty', require('./routes/faculty'));
 app.use('/api/subjects', require('./routes/subjects'));
 app.use('/api/rooms', require('./routes/rooms'));

@@ -2,6 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Dashboard from './pages/Dashboard';
+import Departments from './pages/Departments';
+import Programs from './pages/Programs';
+import Sections from './pages/Sections';
 import Faculty from './pages/Faculty';
 import Subjects from './pages/Subjects';
 import Rooms from './pages/Rooms';
@@ -14,6 +17,9 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/departments" element={<Departments />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/sections" element={<Sections />} />
           <Route path="/faculty" element={<Faculty />} />
           <Route path="/subjects" element={<Subjects />} />
           <Route path="/rooms" element={<Rooms />} />

@@ -1,11 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, BookOpen, DoorClosed, Wand2, CalendarDays } from 'lucide-react';
+import { LayoutDashboard, Users, User, BookOpen, DoorClosed, Wand2, CalendarDays, Library, GraduationCap } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard },
-  { name: 'Faculty', path: '/faculty', icon: Users },
+  { name: 'Departments', path: '/departments', icon: Library },
+  { name: 'Programs', path: '/programs', icon: GraduationCap },
+  { name: 'Sections', path: '/sections', icon: Users },
+  { name: 'Faculty', path: '/faculty', icon: User },
   { name: 'Subjects', path: '/subjects', icon: BookOpen },
   { name: 'Rooms', path: '/rooms', icon: DoorClosed },
   { name: 'Generate', path: '/generate', icon: Wand2 },

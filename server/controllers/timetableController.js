@@ -10,6 +10,9 @@ exports.getTimetable = async (req, res, next) => {
     const timetable = await TimetableEntry.find()
       .populate('subjectId')
       .populate('facultyId', 'name')
+      .populate('departmentId', 'code name')
+      .populate('programId', 'name')
+      .populate('sectionId', 'name')
       .sort({ day: 1, timeSlot: 1 });
     res.json(timetable);
   } catch (error) { next(error); }
@@ -29,6 +32,9 @@ exports.getTimetableByFaculty = async (req, res, next) => {
     const entries = await TimetableEntry.find({ facultyId: req.params.id })
       .populate('subjectId', 'name code')
       .populate('facultyId', 'name department')
+      .populate('departmentId', 'code name')
+      .populate('programId', 'name')
+      .populate('sectionId', 'name')
       .sort({ day: 1, timeSlot: 1 });
 
     // Also return summary stats

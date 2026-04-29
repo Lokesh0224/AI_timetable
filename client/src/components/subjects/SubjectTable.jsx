@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Layers } from 'lucide-react';
 import { subjectsAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { useAppContext } from '../../context/AppContext';
@@ -22,20 +22,10 @@ export default function SubjectTable({ subjectList, onRefresh, onEdit }) {
     return (
       <div className="flex flex-col items-center justify-center p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white bg-opacity-50 h-[400px]">
         <h3 className="text-xl font-bold text-slate-700 mb-1 tracking-tight">No subjects added yet.</h3>
-        <p className="text-slate-500 font-medium">Fill the form to add subjects mapping to years and faculty.</p>
+        <p className="text-slate-500 font-medium">Fill the form to assign subjects mapping to the academic tree.</p>
       </div>
     );
   }
-
-  const getYearBadge = (year) => {
-    const map = {
-      1: "bg-blue-100 text-blue-800 shadow-blue-100/50",
-      2: "bg-green-100 text-green-800 shadow-green-100/50",
-      3: "bg-amber-100 text-amber-800 shadow-amber-100/50",
-      4: "bg-purple-100 text-purple-800 shadow-purple-100/50"
-    };
-    return map[year] || "bg-slate-100 text-slate-700";
-  };
 
   return (
     <div className="bg-white border md:border-transparent border-slate-200 shadow-md rounded-2xl overflow-hidden ring-1 ring-slate-900/5">
@@ -46,7 +36,7 @@ export default function SubjectTable({ subjectList, onRefresh, onEdit }) {
             <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider">Code</th>
             <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider">Subject Name</th>
             <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider">Faculty</th>
-            <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider">Year</th>
+            <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider">Scope</th>
             <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider text-right">Actions</th>
           </tr>
         </thead>
@@ -57,11 +47,12 @@ export default function SubjectTable({ subjectList, onRefresh, onEdit }) {
               <td className="px-6 py-4 font-semibold text-slate-900">{sub.name}</td>
               <td className="px-6 py-4 font-medium text-slate-600">{sub.facultyId?.name || <span className="text-amber-500 italic">Unassigned</span>}</td>
               <td className="px-6 py-4">
-                <span className={`px-3 py-1.5 rounded-lg text-xs font-bold shadow-sm ${getYearBadge(sub.year)}`}>
-                  {sub.year}{sub.year===1?'st':sub.year===2?'nd':sub.year===3?'rd':'th'} Year
-                </span>
+                <div className="flex flex-col gap-1 text-[11px] font-bold">
+                   <span className="text-slate-500">{sub.departmentId?.code} / {sub.programId?.name}</span>
+                   <span className="text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded shadow-sm w-max border border-indigo-100">Yr {sub.year} • Sec {sub.sectionId?.name}</span>
+                </div>
               </td>
-              <td className="px-6 py-4 text-right">
+              <td className="px-6 py-4 text-right align-middle">
                 <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => onEdit(sub)} className="p-2 text-slate-400 hover:text-indigo-600 rounded-lg hover:bg-slate-100" title="Edit"><Pencil className="w-4 h-4"/></button>
                   <button onClick={() => handleDelete(sub)} className="p-2 text-slate-400 hover:text-red-600 rounded-lg hover:bg-red-50" title="Delete"><Trash2 className="w-4 h-4"/></button>

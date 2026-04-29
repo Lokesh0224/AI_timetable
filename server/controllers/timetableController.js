@@ -26,11 +26,31 @@ exports.getTimetableByYear = async (req, res, next) => {
 
 exports.getTimetableByFaculty = async (req, res, next) => {
   try {
-    const timetable = await TimetableEntry.find({ facultyId: req.params.id })
-      .populate('subjectId')
-      .populate('facultyId', 'name');
-    res.json(timetable);
-  } catch (error) { next(error); }
+    const entries = await TimetableEntry.find({ facultyId: req.params.id })
+      .populate('subjectId', 'name code')
+      .populate('facultyId', 'name department')
+      .sort({ day: 1, timeSlot: 1 });
+
+    // Also return summary stats
+    const days = [...new Set(entries.map(e => e.day))];
+    const subjects = [...new Set(entries.map(e => e.subjectId.name))];
+    const dayCount = {};
+    entries.forEach(e => {
+      dayCount[e.day] = (dayCount[e.day] || 0) + 1;
+    });
+    const busiestDay = Object.entries(dayCount)
+      .sort((a, b) => b[1] - a[1])[0]?.[0] || 'N/A';
+
+    res.json({
+      entries,
+      summary: {
+        totalClasses: entries.length,
+        subjects,
+        activeDays: days,
+        busiestDay
+      }
+    });
+  } catch (error) { res.status(500).json({ message: error.message }); }
 };
 
 exports.getTimetableByDay = async (req, res, next) => {
@@ -119,6 +139,20 @@ exports.exportYearCSV = async (req, res, next) => {
   try {
     const entries = await TimetableEntry.find({ year: req.params.year }).populate('subjectId').populate('facultyId');
     downloadCSV(res, entries, `timetable_year_${req.params.year}.csv`);
+  } catch (error) { next(error); }
+};
+
+exports.exportFacultyCSV = async (req, res, next) => {
+  try {
+    const faculty = await Faculty.findById(req.params.id);
+    if (!faculty) return res.status(404).json({ message: 'Faculty not found' });
+    
+    const entries = await TimetableEntry.find({ facultyId: req.params.id })
+      .populate('subjectId')
+      .populate('facultyId');
+      
+    const formattedName = faculty.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+    downloadCSV(res, entries, `timetable_${formattedName}.csv`);
   } catch (error) { next(error); }
 };
 

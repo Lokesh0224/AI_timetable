@@ -8,7 +8,15 @@ import axios from 'axios';
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
 const SLOTS = ['9AM','10AM','11AM','12PM','1PM','2PM','3PM','4PM','5PM'];
 
-function PriorityDot({ priority }) {
+function PriorityDot({ priority, isFallback }) {
+  if (isFallback) {
+    return (
+      <div
+        className="w-2.5 h-2.5 rounded-full bg-red-400 absolute top-2 right-2 border border-white/50 shadow-sm"
+        title="Scheduled outside priority slots (best-effort fallback)"
+      />
+    );
+  }
   if (!priority) return null;
   const colors = {
     1: 'bg-green-500',
@@ -16,9 +24,9 @@ function PriorityDot({ priority }) {
     3: 'bg-orange-500'
   };
   const labels = {
-    1: 'Scheduled at preferred time',
-    2: 'Scheduled at fallback time (P2)',
-    3: 'Scheduled at last resort time (P3)'
+    1: 'Priority 1 - preferred slot',
+    2: 'Priority 2 - fallback slot',
+    3: 'Priority 3 - last resort slot'
   };
   return (
     <div
@@ -243,10 +251,11 @@ export default function ViewTimetable() {
             </div>
           )}
 
-          <div className="bg-white border-b border-slate-200 px-5 py-3 flex gap-6 text-xs text-slate-600 font-bold">
-            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm border border-white/50"/>Scheduled at Priority 1</span>
-            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm border border-white/50"/>Scheduled at Priority 2</span>
-            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-orange-500 shadow-sm border border-white/50"/>Scheduled at Priority 3</span>
+          <div className="bg-white border-b border-slate-200 px-5 py-3 flex gap-6 text-xs text-slate-600 font-bold flex-wrap">
+            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm border border-white/50"/>Priority 1 (preferred)</span>
+            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm border border-white/50"/>Priority 2 (fallback)</span>
+            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-orange-500 shadow-sm border border-white/50"/>Priority 3 (last resort)</span>
+            <span className="flex items-center gap-2"><span className="inline-block w-2.5 h-2.5 rounded-full bg-red-400 shadow-sm border border-white/50"/>Best-effort (outside priorities)</span>
           </div>
 
           <div className="flex bg-slate-50 border-b border-slate-200">
@@ -292,7 +301,7 @@ export default function ViewTimetable() {
                             key={c._id} 
                             className={`relative p-3.5 border-l-4 rounded-r-xl rounded-l-sm shadow-sm flex flex-col h-full ring-1 ring-black/5 hover:shadow-md transition-shadow cursor-default ${getYearColor(c.year)}`}
                           >
-                            <PriorityDot priority={c.priority} />
+                            <PriorityDot priority={c.priority} isFallback={c.isFallback} />
                             <div className="font-extrabold text-[13px] leading-tight mb-1 pr-4" title={c.subjectId?.name}>{c.subjectId?.name}</div>
                             {!selectedFacultyObj && <div className="text-[11px] font-bold opacity-80 truncate tracking-wide">{c.facultyId?.name}</div>}
                             <div className="font-mono text-[10px] font-bold opacity-70 uppercase my-1">{c.room}</div>

@@ -242,6 +242,7 @@ export default function Generate() {
                         <th className="px-6 py-4 text-center text-green-700">P1</th>
                         <th className="px-6 py-4 text-center text-amber-700">P2</th>
                         <th className="px-6 py-4 text-center text-orange-700">P3</th>
+                        <th className="px-6 py-4 text-center text-red-600">Best-Effort</th>
                         <th className="px-6 py-4 text-center font-extrabold">Total</th>
                       </tr>
                     </thead>
@@ -254,6 +255,7 @@ export default function Generate() {
                           <td className="px-6 py-3 text-center font-mono font-bold text-green-600">{row.p1 || '-'}</td>
                           <td className="px-6 py-3 text-center font-mono font-bold text-amber-500">{row.p2 || '-'}</td>
                           <td className="px-6 py-3 text-center font-mono font-bold text-orange-500">{row.p3 || '-'}</td>
+                          <td className="px-6 py-3 text-center font-mono font-bold text-red-500">{row.fallback || '-'}</td>
                           <td className="px-6 py-3 text-center font-bold text-slate-900">{row.total}</td>
                         </tr>
                       ))}

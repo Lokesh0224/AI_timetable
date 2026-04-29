@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Backend for Faculty Timetable",
   "main": "app.js",
-  "scripts": { "dev": "nodemon app.js", "start": "node app.js" },
+  "scripts": {
+    "test": "jest --testPathPattern=tests/",
+    "dev": "nodemon app.js",
+    "start": "node app.js"
+  },
   "dependencies": {
     "express": "^4.18.2",
     "mongoose": "^7.6.3",
@@ -12,5 +16,8 @@
     "express-validator": "^7.0.1",
     "json2csv": "^6.0.0-alpha.2"
   },
-  "devDependencies": { "nodemon": "^3.0.1" }
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1"
+  }
 }

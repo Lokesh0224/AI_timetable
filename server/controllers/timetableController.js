@@ -78,21 +78,9 @@ exports.generate = async (req, res, next) => {
     if (subjects.length === 0) return res.status(400).json({ message: 'No subjects available.' });
     if (faculties.length === 0) return res.status(400).json({ message: 'No faculty available.' });
 
-    let totalAvailableSlotsCount = 0;
     const facultyMap = {};
     for (const f of faculties) {
       facultyMap[f._id.toString()] = f;
-      // count valid slots (excluding lunch)
-      const validSlots = (f.availability || []).filter(a => a.timeSlot !== '1PM').length;
-      totalAvailableSlotsCount += validSlots;
-    }
-
-    const totalSessionsNeeded = subjects.reduce((acc, sub) => acc + sub.hoursPerWeek, 0);
-
-    if (totalAvailableSlotsCount < totalSessionsNeeded) {
-      return res.status(400).json({ 
-        message: `Not enough slots. Need ${totalSessionsNeeded} sessions but only ${totalAvailableSlotsCount} slots available across all faculty.` 
-      });
     }
 
     // Run scheduler
